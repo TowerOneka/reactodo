@@ -1,11 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import TodolistContainer from './components/TodolistContainer';
 
-let App = (props) => {
+let App = () => {
   return(
     <div className = 'Wrapper'>
-      <TodolistContainer store = {props.store}/>
+      <TodolistContainer/>
     </div>
   )
 }

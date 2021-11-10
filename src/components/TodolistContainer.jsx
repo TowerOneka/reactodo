@@ -1,76 +1,69 @@
 import Filter from "./view/Filter";
 import Input from './view/Input';
-import React, { useState } from 'react';
 import Tasks from './view/tasks/Tasks';
-import Task from './view/tasks/Task';
 import { addTodoAC, changeFilterAC, checkAC, deleteTodoAC, clearCompleteAC, toggleAllAC, editAC, applyEditAC } from './../redux/taskReducer';
-
+import { useSelector, useDispatch } from "react-redux";
 
 
 let TodolistContainer = (props) =>{
-    let state = props.store.getState().tasks;
+    const state = useSelector((state) => state.tasks);
+
+    const dispatch = useDispatch();
 
     let check =(ind)=>{
-        props.store.dispatch(checkAC(ind));
-        changeTasks();
+        dispatch(checkAC(ind));
     }
     let deleteTodo = (ind) =>{
-        props.store.dispatch(deleteTodoAC(ind))
-        changeTasks();
+        dispatch(deleteTodoAC(ind))
     }
     let changeFilter = (ind) =>{
-        props.store.dispatch(changeFilterAC(ind))
-        changeTasks();
+        dispatch(changeFilterAC(ind))
     }
     let clearButton = () =>{
-        props.store.dispatch(clearCompleteAC())
-        changeTasks();
+        dispatch(clearCompleteAC())
     }
     let toggleAll = () =>{
-        props.store.dispatch(toggleAllAC())
-        changeTasks();
+        dispatch(toggleAllAC())
     }
     let edit = (ind) =>{
-        props.store.dispatch(editAC(ind))
-        changeTasks();
+        dispatch(editAC(ind))
     }
     let applyEdit = (ind, text) =>{
-        props.store.dispatch(applyEditAC(ind, text))
-        changeTasks();
+        dispatch(applyEditAC(ind, text))
     }
-
-    const [todos, setTodos] = useState(state.todolist.map( todo => <Task key={todo.id} id={todo.id} text={todo.text} checked={todo.checked} editing={todo.inEdit} checkAction = {check} deleteAction = {deleteTodo} edit={edit} apply={applyEdit}/>))
-    
     let submitForm = (text) =>{
-        props.store.dispatch(addTodoAC(text));
-        changeTasks();
+        dispatch(addTodoAC(text));
     }
 
 
-
-    let changeTasks = () =>{
-        let active__filter = state.filter_count;
-        if(active__filter === 2){
-            setTodos(state.todolist.map( (todo) => {
-                if(todo.checked){
-                    <Task key={todo.id} id={todo.id} text={todo.text} checked={todo.checked} editing={todo.inEdit} checkAction = {check} deleteAction = {deleteTodo} edit={edit} apply={applyEdit}/>
-                }
-            }))
-        }
-        if(active__filter === 3){
-            setTodos(state.todolist.map( (todo) => {
-                if(!todo.checked){
-                    <Task key={todo.id} id={todo.id} text={todo.text} checked={todo.checked} editing={todo.inEdit} checkAction = {check} deleteAction = {deleteTodo} edit={edit} apply={applyEdit}/>
-                }
-            }))
-        }
-        else{ setTodos(state.todolist.map( todo => <Task key={todo.id} id={todo.id} text={todo.text} checked={todo.checked} editing={todo.inEdit} checkAction = {check} deleteAction = {deleteTodo} edit={edit} apply={applyEdit}/>)) }
+    let todos = [];
+    
+    if(state.filter_count === 2){
+        state.todolist.forEach( todo => {
+            if(todo.checked === false){
+                todos.push({id: todo.id, text: todo.text, checked: todo.checked, inEdit: todo.inEdit})
+            }
+        })
     }
+    else if(state.filter_count === 3){
+        state.todolist.forEach( todo => {
+            if(todo.checked){
+                todos.push({id: todo.id, text: todo.text, checked: todo.checked, inEdit: todo.inEdit})
+            }
+        })
+    }
+    else{ 
+        state.todolist.forEach( todo => {
+                todos.push({id: todo.id, text: todo.text, checked: todo.checked, inEdit: todo.inEdit})
+        })
+     }
+     
+
     
     return(
         <div className="container">
-            <Input submit = {submitForm} toggleAll={toggleAll} toggleColor={state.active_count===0 & state.todolist.length > 0 ? '#26de81' : '#778ca3'}/>
-            <Tasks todos={todos}/>
+            <Input onSubmit = {submitForm} onToggleAll={toggleAll} toggleColor={state.active_count===0 & state.todolist.length > 0 ? '#26de81' : '#778ca3'}/>
+            <Tasks todos={todos} onCheckAction={check} onDelete = {deleteTodo} onEdit={edit} onApplyEdit={applyEdit}/>
             <Filter active = {state.active_count} filter = {state.filter_count} changeFilter = {changeFilter} clear={state.todolist.length !== state.active_count ? 1 : 0} clearButton={clearButton}/>
         </div>
     );
