@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = localStorage.getItem('todo') ? JSON.parse(localStorage.getItem('todo')) : {
     todolist: [],
     active_count: 0,
-    filter_count: 1,
+    filter_count: 'All',
     clear_completed_opacity: true
 }
 
