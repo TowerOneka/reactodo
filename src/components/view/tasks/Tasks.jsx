@@ -1,5 +1,6 @@
-import Task from './Task';
-import s from './Tasks.module.scss'
+import Task from '../Task';
+import React from 'react';
+import s from '../Tasks.module.scss'
 
 let Tasks = (props) =>{
     return(
@@ -9,4 +10,4 @@ let Tasks = (props) =>{
     )
 }
 
-export default Tasks
+export default Tasks;

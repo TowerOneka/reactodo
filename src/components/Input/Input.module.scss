@@ -1,0 +1,36 @@
+.form{
+    display: flex;
+    align-items: center;
+    #todo__form{
+        flex-basis: 350px;
+        padding-right: 4px;
+    }
+    .toggleAllButton{
+        flex-basis: 32px;
+        width: 100%;
+    }
+    #toggleAll{
+        padding: 0 20px;
+        position: relative;
+        cursor: pointer;
+        color: #778ca3;
+        font-size: 22px;
+        background-color: white;
+        border: none;
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+
+    #todo__text, .edit{
+        border: 1px solid #ced6e0;
+        border-radius: 2px;
+        width: 100%;
+        max-width: 350px;
+        padding: 1px;
+        height: 50px;
+        margin: auto;
+    }
+    #todo__text:focus, .edit:focus{
+        border: 1px solid #0652DD;
+    }
+}
